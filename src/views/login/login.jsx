@@ -3,6 +3,8 @@ import AppHelper from "helpers/AppHelper.js";
 import { connect } from 'react-redux';
 import { requestLogin, developerModeLogin } from 'actions';
 
+import Card from '../../components/card/card';
+import "./login.scss";
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +18,7 @@ class Login extends Component {
   }
 
   errorMessage = () => {
-    if(this.state.error) {
+    if (this.state.error) {
       return (
         <p><b>{this.state.errorMsg}</b></p>
       )
@@ -61,8 +63,8 @@ class Login extends Component {
     if (!this.validationCheck()) return;
     this.props.dispatchLogin(this.state).then((response) => {
       if (
-      response && response.payload && response.payload.data &&
-      response.payload.data.data && response.payload.data.data.accessToken
+        response && response.payload && response.payload.data &&
+        response.payload.data.data && response.payload.data.data.accessToken
       ) {
         const accessToken = response.payload.data.data.accessToken;
         AppHelper.loginUser(true, accessToken);
@@ -76,27 +78,42 @@ class Login extends Component {
   }
 
   render() {
+
+    let cardStyle = {
+      width: "30%",
+      height: "30%",
+      borderRadius: "10px",
+      opacity: 0.9,
+      backgroundColor: "rgba(250, 250, 250, 0.9)",
+      margin: "auto",
+      paddingLeft: "2%",
+      paddingRight: "2%"
+    }
+
     return (
+
       <div className="Login">
         <h1>
           {this.props.parentState.title}
         </h1>
-        <div className='row'>
+        <Card cardStyle={cardStyle}>
           <div className='row'>
-            <div className='col s6 offset-s3'>
+            <div className='row'>
+              <br />
               <input placeholder="Email" id="email" type="email" className="validate" onChange={this.handleEmailChange} />
               <input placeholder="Password" id="password" type="password" className="validate" onChange={this.handlePasswordChange} />
+              <br /><br />
               {this.errorMessage()}
               {
-                this.props.loginLoading ? 
-                  "Loading..." : 
-                  <a className="waves-effect waves-light btn" id="loginButton" onClick={this.performLogin} href="#!">
+                this.props.loginLoading ?
+                  "Loading..." :
+                  <a className="waves-effect waves-light cyan btn" id="loginButton" onClick={this.performLogin} href="#!">
                     <i className="material-icons left">cloud</i>Login
                   </a>
               }
             </div>
           </div>
-        </div>
+        </Card>
       </div>
     );
   }
@@ -104,14 +121,14 @@ class Login extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchLogin  : (data) => dispatch(requestLogin(data)),
-    dispatchDeveloperModeLogin : () => dispatch(developerModeLogin())
+    dispatchLogin: (data) => dispatch(requestLogin(data)),
+    dispatchDeveloperModeLogin: () => dispatch(developerModeLogin())
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    loginLoading : state.loginStatus.loginLoading
+    loginLoading: state.loginStatus.loginLoading
   }
 }
 

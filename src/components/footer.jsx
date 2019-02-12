@@ -6,7 +6,7 @@ class Footer extends Component {
       <footer className="Footer page-footer">
         <div className="footer-copyright">
           <div className="container">
-            Modify components/footer.jsx
+            Lily Depression Bot
           </div>
         </div>
       </footer>

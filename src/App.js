@@ -12,12 +12,13 @@ import { requestAccessTokenLogin } from 'actions';
 import Login from 'views/login/login.jsx';
 import Home from 'views/home/home.jsx';
 import Team from 'views/team/team.jsx';
+import Conversation from 'views/conversation/conversation'
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'DLP React Boilerplate',
+      title: 'LilyBot',
     };
   }
 
@@ -46,20 +47,24 @@ class App extends Component {
       <div className="App">
         {/* Header */}
         {this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ? <Header title={this.state.title} logout={this.stateHandler} /> : ''}
-        
+
         {/* Main body */}
         <Switch>
-          
+
           <Route exact path='/' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
-            <Redirect to='/home' /> : <Login parentState={this.state} parentProps={this.props} /> )}
+            <Redirect to='/home' /> : <Login parentState={this.state} parentProps={this.props} />)}
           />
 
-          <Route exact path='/team' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ? 
-            <Team {...props}/> : <Redirect to='/' /> )} 
+          <Route exact path='/team' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+            <Team {...props} /> : <Redirect to='/' />)}
           />
 
-          <Route exact path='/home' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ? 
-            <Home {...props}/> : <Redirect to='/' /> )} 
+          <Route exact path='/home' render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+            <Home {...props} /> : <Redirect to='/' />)}
+          />
+
+          <Route exact path="/conversation" render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+            <Conversation {...props} /> : <Redirect to="/" />)}
           />
 
           <Route exact path='/test' render={() => <div>Test</div>} />
