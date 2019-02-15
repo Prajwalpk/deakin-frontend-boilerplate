@@ -13,6 +13,7 @@ import Login from 'views/login/login.jsx';
 import Home from 'views/home/home.jsx';
 import Team from 'views/team/team.jsx';
 import Conversation from 'views/conversation/conversation'
+import UserHome from 'views/userHome/userHome';
 
 class App extends Component {
   constructor(props) {
@@ -65,6 +66,10 @@ class App extends Component {
 
           <Route exact path="/conversation" render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
             <Conversation {...props} /> : <Redirect to="/" />)}
+          />
+
+          <Route exact path="/userhome" render={(props) => (this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ?
+            <UserHome {...props} /> : <Redirect to="/" />)}
           />
 
           <Route exact path='/test' render={() => <div>Test</div>} />

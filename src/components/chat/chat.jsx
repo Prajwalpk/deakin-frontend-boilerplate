@@ -98,7 +98,6 @@ class Chat extends Component {
                     {
                         id: "userAnswer",
                         user: true,
-                        hideInput: false,
                         trigger: "lilyQuestion"
                     },
                     {

@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Card from '../../components/card/card';
-import Chat from '../../components/chat/chat';
-import M from 'materialize-css';
-import { ThemeProvider } from 'styled-components';
 import BotIcon from '../../images/lilybot.png'
 import LoadingComponent from '../../components/loading/loading';
+import { Route, Redirect } from 'react-router-dom';
 
 import Axios from 'axios';
 
@@ -13,12 +11,10 @@ import Axios from 'axios';
 const theme = {
   background: '#f5f8fb',
   fontFamily: 'Helvetica Neue',
-  //headerBgColor: '#44cdff',
-  headerBgColor: 'Teal',
+  headerBgColor: '#44cdff',
   headerFontColor: '#fff',
   headerFontSize: '15px',
-  //botBubbleColor: '#44cdff',
-  botBubbleColor: 'Teal',
+  botBubbleColor: '#44cdff',
   botFontColor: '#fff',
   userBubbleColor: '#fff',
   userFontColor: '#4a4a4a',
@@ -58,18 +54,17 @@ class Home extends Component {
     this.setState({
       userId: userId
     })
-
-    //alert(`Clicked user : ${this.state.userId}`)
   }
 
   render() {
+    
     if(!(typeof this.state.cardLoaded) === 'undefined' || !this.state.cardLoaded) {
     //if (!this.state.cardLoaded) {
       return (
         <div className="Home">
           <header className="App-header">
             <div className="container">
-              <LoadingComponent loaderStyle="spinner-layer spinner-teal-only" />
+              <LoadingComponent loaderStyle="spinner-layer spinner-blue-only" />
             </div>
           </header>
         </div>
@@ -84,9 +79,9 @@ class Home extends Component {
                   this.state.depResults.map((result, i) => (
                     <div key={i}>
                       <Link to={{ pathname: '/conversation', params: result.UserID }}>
-                        <Card cardClass="col s12 m3 card hoverable" onClick={() => {this.handleCardClick(result.UserID)}}>
+                        <Card cardClass="col s12 m3 l3 card hoverable" onClick={() => {this.handleCardClick(result.UserID)}}>
                           <div className="card-image black-text">
-                            <img src={BotIcon}></img>
+                            {/*<img src={BotIcon} className="circle"></img>*/}
                           </div>
                           <div className="card-stacked">
                             <div className="card-content black-text">
@@ -107,9 +102,6 @@ class Home extends Component {
                 }
               </div>
             </div>
-            <ThemeProvider theme={theme}>
-              <Chat />
-            </ThemeProvider>
           </header>
         </div>
       );

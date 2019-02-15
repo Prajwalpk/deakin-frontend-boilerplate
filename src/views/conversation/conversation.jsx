@@ -35,23 +35,37 @@ class Conversation extends Component {
     }
 
     render() {
+
+        const chatPanelStyle = {
+            overflowY: 'scroll',
+            height: '87vh'
+        }
+
         if ((typeof this.state.userId) === 'undefined')
             return <Redirect to="/"></Redirect>
 
         if (!this.state.dataLoaded) {
-            return (<LoadingComponent loaderStyle="spinner-layer spinner-teal-only" />);
+            return (<LoadingComponent loaderStyle="spinner-layer spinner-blue-only" />);
         } else {
             return (
                 <div>
-                    {
-                        this.state.conversation.map((result, i) => (
-                            <div keys={i}>
-                               <ConversationWindow content={result}/>
+                    <div className="container" style={chatPanelStyle}>
+                        <div className="row">
+                            <div className="col s0 m4 l4" />
+                            <div className="col s12 m8 l8">
+                                <span className="card-panel grey lighten-5 show-on-medium-and-up">
+                                    {
+                                        this.state.conversation.map((result, i) => (
+                                            <div keys={i}>
+                                                <ConversationWindow content={result} />
+                                            </div>
+                                        ))
+                                    }
+                                </span>
                             </div>
-                        ))
-                    }
+                        </div>
+                    </div>
                 </div>
-
             )
         }
     }

@@ -4,7 +4,15 @@ class AppHelper {
   developerModeLoginUser = (loggedIn) => {
     window.localStorage.setItem("loggedIn", loggedIn);
     window.localStorage.setItem("developerMode", loggedIn);
-    history.push('/home') // Change this if you have to
+    window.localStorage.setItem("admin", false)
+    history.push('/userhome') // Change this if you have to
+  }
+
+  developerModeLoginAdmin = (loggedIn) => {
+    window.localStorage.setItem("loggedIn", loggedIn);
+    window.localStorage.setItem("developerMode", loggedIn);
+    window.localStorage.setItem("admin", true);
+    history.push('/home')
   }
 
   loginUser = (loggedIn, accessToken) => {
@@ -17,6 +25,7 @@ class AppHelper {
     window.localStorage.setItem("loggedIn", false);
     window.localStorage.setItem("developerMode", false);
     window.localStorage.removeItem("accessToken");
+    window.localStorage.removeItem("admin");
     history.push('/')
   }
 
