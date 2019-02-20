@@ -20,10 +20,7 @@ class LilyDialogInterface extends Component {
             lilyResponse: ''
         };
 
-        //this.socket = SocketIOClient(process.env.DEP_BOT_URL);
-        //this.socket = SocketIOClient('launchpad-master.it.deakin.edu.au:8003');
-        this.socket = SocketIOClient('localhost:8003');
-        //this.triggerNext = this.triggerNext.bind(this);
+        this.socket = SocketIOClient(process.env.REACT_APP_LILY_API_BASE_URL);
     }
 
     componentDidMount() {
