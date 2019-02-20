@@ -22,9 +22,6 @@ const theme = {
 };
 
 class UserHome extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         M.AutoInit();
@@ -36,7 +33,7 @@ class UserHome extends Component {
             <div className="container">
                 <div className="parallax-container">
                     <div className="parallax">
-                        <img src={HappyGroup} />
+                        <img src={HappyGroup} alt="Happy group of people" />
                     </div>
                 </div>
                 <div className="section white">
@@ -52,7 +49,7 @@ class UserHome extends Component {
                 </div>
                 <div className="parallax-container">
                     <div className="parallax">
-                        <img src={HappyMan} />
+                        <img src={HappyMan} alt="Happy man" />
                     </div>
                 </div>
                 <div className="section white">
@@ -66,7 +63,7 @@ class UserHome extends Component {
                 </div>
                 <div className="parallax-container">
                     <div className="parallax">
-                        <img src={HappyWoman} />
+                        <img src={HappyWoman} alt="Happy woman" />
                     </div>
                 </div>
                 <div className="section white">
@@ -88,7 +85,7 @@ class UserHome extends Component {
                             </div>
                         </Card>
                         <Card cardClass="col s12 m4 l4 card">
-                        <div className="card-content">
+                            <div className="card-content">
                                 <h6>Find out about treatments</h6>
                             </div>
                             <div className="card-action">
@@ -96,7 +93,7 @@ class UserHome extends Component {
                             </div>
                         </Card>
                         <Card cardClass="col s12 m4 l4 card">
-                        <div className="card-content">
+                            <div className="card-content">
                                 <h6>Get Support</h6>
                             </div>
                             <div className="card-action">

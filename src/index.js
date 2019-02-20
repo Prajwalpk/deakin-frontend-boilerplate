@@ -10,7 +10,8 @@ import axios from 'axios';
 import axiosMiddleware from 'redux-axios-middleware';
 import rootReducer from 'reducers';
 
-export const baseURL = process.env.REACT_APP_BASE_URL + "/api";
+//export const baseURL = process.env.REACT_APP_BASE_URL + "/api";
+export const baseURL = process.env.REACT_APP_LILY_API_BASE_URL + "api/";
 
 export const axiosClient = axios.create({
   baseURL: baseURL,

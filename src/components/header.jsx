@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import AppHelper from "helpers/AppHelper.js";
 import { connect } from 'react-redux';
 import { requestLogout } from 'actions';
+import { history } from '../helpers/router';
 
 import M from 'materialize-css';
 
 class Header extends Component {
+
   logout = (e) => {
     e.preventDefault();
     this.props.dispatchLogout()
@@ -27,13 +29,21 @@ class Header extends Component {
     M.Dropdown.init(this.dropdown, { constrainWidth: true, coverTrigger: false });
   }
 
+  /**
+   * Funtion to handle home button click. If admin, redirect
+   * to admin page. Users are redirected to user landing page.
+   * 
+   * TODO: Add role based redirect using tokens.
+   * @param {*} e 
+   */
   handleHomeRedirect(e) {
     e.preventDefault();
     let admin = window.localStorage.getItem("admin");
-    if(admin !== 'false' && admin !== null)
-      window.location.replace("/home");
-    else
-      window.location.replace("/userhome");
+    if (admin !== 'false' && admin !== null) {
+      history.push("/home");
+    } else {
+      history.push("/userhome");
+    }
   }
 
   render() {
@@ -42,7 +52,7 @@ class Header extends Component {
         <div className="navbar-fixed ">
           <nav className="light-blue accent-2">
             <div className="nav-wrapper">
-              <a href="#" className="left btn-flat btn-floating light-blue accent-2 waves-effect waves-light" onClick={this.handleHomeRedirect}>
+              <a href="#!" className="left btn-flat btn-floating light-blue accent-2 waves-effect waves-light" onClick={this.handleHomeRedirect}>
                 <i className="material-icons white-text">home</i>
               </a>
               <a href="#!" className="brand-logo center">{this.props.title}</a>

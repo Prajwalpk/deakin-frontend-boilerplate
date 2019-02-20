@@ -11,7 +11,7 @@ export const requestLogin = (data) => ({
       url: 'user/login',
       method: 'POST',
       data: {
-        emailId: data.emailId,
+        email: data.emailId,
         password: data.password
       }
     }

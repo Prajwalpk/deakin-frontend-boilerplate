@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import Card from '../card/card';
 
 class ConversationWindow extends Component {
-    constructor(props) {
-        super(props)
-    }
 
     render() {
         let botBubble = {

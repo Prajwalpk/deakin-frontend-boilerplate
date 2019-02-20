@@ -2,20 +2,35 @@ import React, { Component } from 'react';
 import AppHelper from "helpers/AppHelper.js";
 import { connect } from 'react-redux';
 import { requestLogin, developerModeLogin } from 'actions';
+import Register from '../../components/register/register';
 
 import Card from '../../components/card/card';
 import "./login.scss";
+
+const userInfo = {
+  "statusCode": 200,
+  "message": {
+    "custommessage": "Found User"
+  },
+  "data": {
+    "userRole": "ADMIN",
+    "userId": "31bd5fa0-30e1-11e9-8c5c-4dec16895fdc"
+  }
+}
+
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       emailId: '',
       password: '',
-      developerMode: true, // Change this to false to contact API
+      developerMode: false, // Change this to false to contact API
       error: false,
       errorMsg: '',
-      adminUser: false
+      register: false
     };
+
+    this.handleRegister = this.handleRegister.bind(this);
   }
 
   errorMessage = () => {
@@ -28,13 +43,15 @@ class Login extends Component {
 
   handleEmailChange = (e) => {
     this.setState({
-      emailId: e.target.value
+      emailId: e.target.value,
+      errorMsg: ''
     });
   }
 
   handlePasswordChange = (e) => {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
+      errorMsg: ''
     });
   }
 
@@ -56,28 +73,45 @@ class Login extends Component {
     e.preventDefault();
     if (this.state.developerMode) {
       console.log('inside developerMode login');
-      
-      if (this.state.emailId === 'admin' && this.state.password === 'admin') {
-        this.setState({ adminUser: true });
+
+      if (userInfo && userInfo.statusCode === 200) {
+        const userId = userInfo.data.userId;
+        const userRole = userInfo.data.userRole;
         this.props.dispatchDeveloperModeLogin();
-        AppHelper.developerModeLoginAdmin(true);
+        AppHelper.basicLoginUser(true, userRole, userId);
 
       } else {
-        this.props.dispatchDeveloperModeLogin();
-        AppHelper.developerModeLoginUser(true);
+        this.setState({
+          error: true,
+          errorMsg: "Invalid email or password!"
+        })
       }
 
       return;
     }
+
     console.log('outside developerMode login');
     if (!this.validationCheck()) return;
     this.props.dispatchLogin(this.state).then((response) => {
-      if (
+      /*if (
         response && response.payload && response.payload.data &&
         response.payload.data.data && response.payload.data.data.accessToken
       ) {
         const accessToken = response.payload.data.data.accessToken;
         AppHelper.loginUser(true, accessToken);
+      } */
+      // Add token based auth. later - use basic auth now.
+      console.log(response)
+
+      if (response && response.payload && response.payload.data &&
+        response.payload.data.statusCode === 200 &&
+        response.payload.data.data && response.payload.data.data.userId) {
+
+        console.log("In Login")
+        const userId = response.payload.data.data.userId;
+        const userRole = response.payload.data.data.userRole;
+        AppHelper.basicLoginUser(true, userRole, userId);
+
       } else {
         this.setState({
           error: true,
@@ -85,6 +119,10 @@ class Login extends Component {
         })
       }
     });
+  }
+
+  handleRegister() {
+    this.setState({ register: !this.state.register })
   }
 
   render() {
@@ -98,38 +136,59 @@ class Login extends Component {
       paddingRight: "2%"
     }
 
-    return (
-
-      <div className="Login">
-        <h1>
-          {this.props.parentState.title}
-        </h1>
-        <div className="container">
-          <div className="row valign-wrapper">
-            <div className="col s0 m4 l2"></div>
-            <Card cardStyle={cardStyle} cardClass="col s12 m4 l8">
-              <div className='row'>
-                <div className='col s12 m12 l12'>
-                  <br />
-                  <input placeholder="Email" id="email" type="email" className="validate" onChange={this.handleEmailChange} />
-                  <input placeholder="Password" id="password" type="password" className="validate" onChange={this.handlePasswordChange} />
-                  <br /><br />
-                  {this.errorMessage()}
-                  {
-                    this.props.loginLoading ?
-                      "Loading..." :
-                      <a className="waves-effect waves-light cyan btn" id="loginButton" onClick={this.performLogin} href="#!">
-                        <i className="material-icons left">cloud</i>Login
-                  </a>
-                  }
-                </div>
-              </div>
-            </Card>
-            <div className="col s0 m4 l2"></div>
+    if (this.state.register) {
+      return (
+        <div className="Login">
+          <h1>
+            {this.props.parentState.title}
+          </h1>
+          <div className="container">
+            <div className="row valign-wrapper">
+              <div className="col s0 m4 l2"></div>
+              <Card cardStyle={cardStyle} cardClass="col s12 m10 l8">
+                <br />
+                <Register onClick={this.handleRegister} fromLogin={true} />
+              </Card>
+              <div className="col s0 m4 l2"></div>
+            </div>
           </div>
         </div>
-      </div>
-    );
+      )
+    } else {
+      return (
+        <div className="Login">
+          <h1>
+            {this.props.parentState.title}
+          </h1>
+          <div className="container">
+            <div className="row valign-wrapper">
+              <div className="col s0 m4 l2"></div>
+              <Card cardStyle={cardStyle} cardClass="col s12 m10 l8">
+                <div className='row'>
+                  <div className='col s12 m12 l12'>
+                    <br />
+                    <input placeholder="Email" id="email" type="email" className="validate" onChange={this.handleEmailChange} />
+                    <input placeholder="Password" id="password" type="password" className="validate" onChange={this.handlePasswordChange} />
+                    <br /><br /><br />
+                    {this.errorMessage()}
+                    {
+                      this.props.loginLoading ?
+                        "Loading..." :
+                        <a className="waves-effect waves-light cyan btn" id="loginButton" onClick={this.performLogin} href="#!">
+                          Login
+                        </a>
+                    }
+                    <br /><br />
+                    <a href="#!" onClick={this.handleRegister} className="grey-text">Don't have an account? Click here to register!</a>
+                  </div>
+                </div>
+              </Card>
+              <div className="col s0 m4 l2"></div>
+            </div>
+          </div>
+        </div>
+      );
+    }
   }
 }
 

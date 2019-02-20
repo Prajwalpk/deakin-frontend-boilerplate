@@ -8,17 +8,24 @@ class AppHelper {
     history.push('/userhome') // Change this if you have to
   }
 
-  developerModeLoginAdmin = (loggedIn) => {
-    window.localStorage.setItem("loggedIn", loggedIn);
-    window.localStorage.setItem("developerMode", loggedIn);
-    window.localStorage.setItem("admin", true);
-    history.push('/home')
-  }
-
   loginUser = (loggedIn, accessToken) => {
     window.localStorage.setItem("loggedIn", loggedIn);
     window.localStorage.setItem("accessToken", accessToken);
     history.push('/home') // Change this if you have to
+  }
+
+  basicLoginUser = (loggedIn, userRole, userId) => {
+    window.localStorage.setItem("loggedIn", loggedIn);
+    window.localStorage.setItem("developerMode", loggedIn);
+    window.localStorage.setItem("userRole", userRole);
+    window.localStorage.setItem("userId", userId);
+    if(userRole === 'ADMIN') {
+      window.localStorage.setItem("admin", true)
+      history.push("/home");
+    } else {
+      window.localStorage.setItem("admin", false);
+      history.push("/userhome");
+    } 
   }
 
   logoutUser = () => {
@@ -26,6 +33,8 @@ class AppHelper {
     window.localStorage.setItem("developerMode", false);
     window.localStorage.removeItem("accessToken");
     window.localStorage.removeItem("admin");
+    window.localStorage.removeItem("userRole");
+    window.localStorage.removeItem("userId");
     history.push('/')
   }
 
@@ -58,6 +67,16 @@ class AppHelper {
 
   getUserAccessToken = () => {
     let value = window.localStorage.getItem("accessToken");
+    return ( value !== 'false' && value !== null && value !== "" ) ? value : "" ;
+  }
+
+  getUserRole = () => {
+    let value = window.localStorage.getItem("userRole");
+    return ( value !== 'false' && value !== null && value !== "" ) ? value : "" ;
+  }
+
+  getUserId = () => {
+    let value = window.localStorage.getItem("userId");
     return ( value !== 'false' && value !== null && value !== "" ) ? value : "" ;
   }
 

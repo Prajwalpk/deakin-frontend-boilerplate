@@ -2,7 +2,7 @@
  * @author: bephilip
  */
 
-import React, { Component, PureComponent } from "react";
+import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import ChatBot from "react-simple-chatbot";
 import SocketIOClient from 'socket.io-client';
@@ -71,9 +71,6 @@ LilyDialogInterface.defaultProps = {
  * Chatbot interface
  */
 class Chat extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (
