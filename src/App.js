@@ -79,7 +79,7 @@ class App extends Component {
         </Switch>
 
         {/* Footer */}
-        {this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ? <Footer /> : ''}
+        {/*this.props.loggedIn || AppHelper.isUserLocalStorageLoggedIn() ? <Footer /> : ''*/}
       </div>
     );
   }
