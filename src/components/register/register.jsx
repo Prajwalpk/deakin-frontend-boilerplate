@@ -130,7 +130,8 @@ class Register extends Component {
         }
     }
 
-    handleCreate() {
+    handleCreate(e) {
+        e.preventDefault();
         if (!this.validateUserInput())
             return;
 
@@ -147,7 +148,6 @@ class Register extends Component {
         Axios.post(createUserUrl, user).then((result) => {
             if(result.data.statusCode) {
                 if (result.data.statusCode === 201) {
-                    alert("Created user");
                     this.props.onClick();
                 }
             } 

@@ -59,6 +59,7 @@ class Header extends Component {
               </ul>
               <a href="#!" className="brand-logo center">{this.props.title}</a>
               <ul className="right">
+              <span className="show-on-medium-and-above">{AppHelper.getUserName()}</span>
                 <a className="no-autoinit btn-flat btn-floating circle cyan accent-4 waves-effect waves-light dropdown-trigger"
                   ref={(dropdown) => { this.dropdown = dropdown }} href="#!" data-target="user-menu">
                   <i className="material-icons white-text">more_vert</i>

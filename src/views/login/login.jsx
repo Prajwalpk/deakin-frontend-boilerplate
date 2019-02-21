@@ -78,7 +78,7 @@ class Login extends Component {
         const userId = userInfo.data.userId;
         const userRole = userInfo.data.userRole;
         this.props.dispatchDeveloperModeLogin();
-        AppHelper.basicLoginUser(true, userRole, userId);
+        AppHelper.basicLoginUser(true, 'Developer', userRole, userId);
 
       } else {
         this.setState({
@@ -110,7 +110,8 @@ class Login extends Component {
         console.log("In Login")
         const userId = response.payload.data.data.userId;
         const userRole = response.payload.data.data.userRole;
-        AppHelper.basicLoginUser(true, userRole, userId);
+        const name = response.payload.data.data.name;
+        AppHelper.basicLoginUser(true, name, userRole, userId);
 
       } else {
         this.setState({

@@ -19,8 +19,13 @@ class Scores extends Component {
     }
 
     render() {
+        var padding = {
+            marginLeft: '5%',
+            marginRight: '5%'
+        }
+
         return (
-            <div className="container">
+            <div className="" style={padding}>
                 <span className="col s12 m12 l12">
                     <h4 className="grey-text text-darken-3 lighten-3 left-align">User Scores</h4>
                 </span>

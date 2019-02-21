@@ -97,17 +97,11 @@ class Home extends Component {
       return (
         <div className="Home grey lighten-4">
           <header className="App-header">
-            <div className="">
-              <div className="col m3 l3">
-                <AdminSidenav onClick={this.handleSidenavClick} views={this.state.views} />
-              </div>
-              <div className="col m9 l9">
-                <div className="row">
-                  {
-                    this.renderPanels()
-                  }
-                </div>
-              </div>
+            <AdminSidenav currentView={this.state.currentView} onClick={this.handleSidenavClick} views={this.state.views} />
+            <div className="row Sidebar-fix">
+              {
+                this.renderPanels()
+              }
             </div>
           </header>
         </div>

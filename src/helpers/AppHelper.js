@@ -14,11 +14,12 @@ class AppHelper {
     history.push('/home') // Change this if you have to
   }
 
-  basicLoginUser = (loggedIn, userRole, userId) => {
+  basicLoginUser = (loggedIn, name, userRole, userId) => {
     window.localStorage.setItem("loggedIn", loggedIn);
     window.localStorage.setItem("developerMode", loggedIn);
     window.localStorage.setItem("userRole", userRole);
     window.localStorage.setItem("userId", userId);
+    window.localStorage.setItem("userName", name);
     if(userRole === 'ADMIN') {
       window.localStorage.setItem("admin", true)
       history.push("/home");
@@ -35,6 +36,7 @@ class AppHelper {
     window.localStorage.removeItem("admin");
     window.localStorage.removeItem("userRole");
     window.localStorage.removeItem("userId");
+    window.localStorage.removeItem("userName");
     history.push('/')
   }
 
@@ -78,6 +80,11 @@ class AppHelper {
   getUserId = () => {
     let value = window.localStorage.getItem("userId");
     return ( value !== 'false' && value !== null && value !== "" ) ? value : "" ;
+  }
+
+  getUserName = () => {
+    let value = window.localStorage.getItem("userName");
+    return ( value !== '' && value !== null ) ? value : "" ;
   }
 
   getDeveloperMode = () => {

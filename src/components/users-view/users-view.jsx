@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Axios from 'axios';
 import M from 'materialize-css';
 import LoadingComponent from '../loading/loading';
+import Register from '../register/register';
 import { Link } from 'react-router-dom';
 
 class Users extends Component {
@@ -46,9 +47,6 @@ class Users extends Component {
         Axios.delete(deleteUserUrl).then((result) => {
 
             if (result.data.statusCode == 200) {
-                this.setState({
-                    usersLoaded: false
-                })
                 this.getUsers();
 
             } else {
@@ -77,9 +75,9 @@ class Users extends Component {
                     {
                         this.state.users.map((user, i) => (
                             <li key={i}>
-                                <div className="collapsible-header black-text">
-                                    {user.firstname} {user.lastname}
-                                    <a href="#!" onClick={() => { this.deleteUser(user.userId) }}><i className="material-icons right grey-text !important">delete</i></a>
+                                <div className="collapsible-header black-text valign-wrapper">
+                                    <span className="col s12 m12 l12 left-align">{user.firstname} {user.lastname}</span>
+                                    <a href="#!" onClick={() => { this.deleteUser(user.userId) }}><i className="material-icons grey-text right-align">delete</i></a>
                                 </div>
                                 <div className="collapsible-body black-text">
                                     {user.firstname} {user.lastname} {user.phone} {user.email}
@@ -102,10 +100,25 @@ class Users extends Component {
     }
 
     render() {
+        var padding = {
+            marginLeft: '5%',
+            marginRight: '5%'
+        }
         return (
-            <div className="container">
+            <div className="" style={padding}>
+                <div id="enroll" className="modal grey-text">
+                <div className="modal-content">
+                    <Register fromLogin={false} onClick={this.getUsers} />
+                </div>
+                </div>
                 <span className="col s12 m12 l12">
-                    <h4 className="grey-text text-darken-3 lighten-3 left-align">Users</h4><br />
+                    <h4 className="grey-text text-darken-3 lighten-3 left-align">
+                        Users
+                        <a className="btn modal-trigger btn-floating waves-effect waves-light cyan accent-4 right" href="#enroll">
+                            <i className="material-icons">add</i>
+                        </a>
+                    </h4>
+                    <br />
                     {
                         this.renderUsers()
                     }

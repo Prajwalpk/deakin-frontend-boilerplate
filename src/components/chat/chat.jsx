@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import ChatBot from "react-simple-chatbot";
 import SocketIOClient from 'socket.io-client';
 
+import AppHelper from "../../helpers/AppHelper.js";
 import botLogo from "../../images/lilybot.png";
 
 /**
@@ -25,11 +26,13 @@ class LilyDialogInterface extends Component {
 
     componentDidMount() {
         const { previousStep } = this.props;
-        var userAnswer = '';
 
-        userAnswer = previousStep.message;
+        var messageObject = {
+            userId: AppHelper.getUserId(),
+            message: previousStep.message
+        }
 
-        this.socket.emit('lilybot', userAnswer);
+        this.socket.emit('lilybot', messageObject);
         this.socket.on('lilybot', (result) => {
 
             this.setState({
