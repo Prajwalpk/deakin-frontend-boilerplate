@@ -10,7 +10,9 @@ class Users extends Component {
         super(props)
         this.state = {
             users: [],
-            usersLoaded: false
+            usersLoaded: false,
+            error: false,
+            errorMessage: ''
         }
 
         this.getUsers = this.getUsers.bind(this);
@@ -28,12 +30,14 @@ class Users extends Component {
             if (result.data.statusCode === 200) {
                 this.setState({
                     users: result.data.data,
-                    usersLoaded: true
+                    usersLoaded: true,
+                    error: false
                 })
             } else {
-                return (
-                    <div><h6>Server Error</h6></div>
-                )
+                this.setState({
+                    error: true,
+                    errorMessage: 'An internal error occured. Please try again after some time.'
+                })
             }
         })
     }
@@ -46,13 +50,14 @@ class Users extends Component {
         let deleteUserUrl = process.env.REACT_APP_LILY_API_BASE_URL + 'api/user/' + userId;
         Axios.delete(deleteUserUrl).then((result) => {
 
-            if (result.data.statusCode == 200) {
+            if (result.data.statusCode === 200) {
                 this.getUsers();
 
             } else {
-                return (
-                    <div><h6>Server Error</h6></div>
-                )
+                this.setState({
+                    error: true,
+                    errorMessage: 'An internal error occured. Please try again after some time.'
+                })
             }
         })
     }
@@ -61,6 +66,12 @@ class Users extends Component {
      * Render fetched users
      */
     renderUsers() {
+        if (this.state.error) {
+            return (
+                <span className="grey-text lighten-3 darken-3"><h5>{this.state.errorMessage}</h5></span>
+            )
+        }
+
         if (!this.state.usersLoaded) {
             return (
                 <div className="Home">
@@ -75,12 +86,35 @@ class Users extends Component {
                     {
                         this.state.users.map((user, i) => (
                             <li key={i}>
-                                <div className="collapsible-header black-text valign-wrapper">
+                                <div className="collapsible-header grey-text text-darken-3 valign-wrapper">
                                     <span className="col s12 m12 l12 left-align">{user.firstname} {user.lastname}</span>
                                     <a href="#!" onClick={() => { this.deleteUser(user.userId) }}><i className="material-icons grey-text right-align">delete</i></a>
                                 </div>
-                                <div className="collapsible-body black-text">
-                                    {user.firstname} {user.lastname} {user.phone} {user.email}
+                                <div className="collapsible-body grey-text text-darken-2">
+                                    <span className="left"><b>Details</b></span><br /><br />
+                                    <table className="left-align responsive-table">
+                                        <tbody>
+                                            <tr>
+                                                <td width="15%">Username</td>
+                                                <td>{user.firstname} {user.lastname}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Phone No.</td>
+                                                <td>{user.phone}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Email</td>
+                                                <td>{user.email}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <br /><br />
+                                    {
+                                        user.userRole === 'USER' ?
+                                            <Link to={{ pathname: '/conversation', params: user }}>
+                                                <span className="grey-text text-darken-2">View Profile</span>
+                                            </Link> : <div />
+                                    }
                                 </div>
                             </li>
                         ))
@@ -107,9 +141,9 @@ class Users extends Component {
         return (
             <div className="" style={padding}>
                 <div id="enroll" className="modal grey-text">
-                <div className="modal-content">
-                    <Register fromLogin={false} onClick={this.getUsers} />
-                </div>
+                    <div className="modal-content">
+                        <Register fromLogin={false} onClick={this.getUsers} />
+                    </div>
                 </div>
                 <span className="col s12 m12 l12">
                     <h4 className="grey-text text-darken-3 lighten-3 left-align">

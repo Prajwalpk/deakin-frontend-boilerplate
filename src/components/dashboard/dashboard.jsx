@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Graph from '../graph/graph';
-import Card from '../card/card';
 import LoadingComponent from '../loading/loading';
 
 class Dashboard extends Component {
@@ -8,13 +7,15 @@ class Dashboard extends Component {
         super(props);
 
         this.state = {
-            depResults: []
+            depResults: [],
+            resultsLoaded: false
         }
     }
 
     componentDidMount() {
         this.setState({
-            depResults: this.props.content
+            depResults: this.props.content,
+            resultsLoaded: true
         })
     }
 
@@ -23,6 +24,11 @@ class Dashboard extends Component {
         var padding = {
             marginLeft: '5%',
             marginRight: '5%'
+        }
+
+        var cardPadding = {
+            marginLeft: '2%',
+            marginRight: '2%'
         }
 
         if ((typeof this.state.depResults) === 'undefined' || !this.state.depResults) {
@@ -39,19 +45,17 @@ class Dashboard extends Component {
                     <span className="col s12 m12 l12">
                         <h4 className="grey-text text-darken-3 lighten-3 left-align">Dashboard</h4>
                     </span>
-                    <div className="card col s12 m5 l5">
+                    <div className="card col s12 m6 l6" style={cardPadding}>
                         <Graph graphData={this.state.depResults} type="doughnut" average={true} />
                     </div>
-                    <div className="col m1 l1" />
-                    <div className="card col s12 m6 l6">
+                    <div className="card col s12 m5 l5" style={cardPadding}>
                         <Graph graphData={this.state.depResults} type="bar" average={true} />
                     </div>
                     <br />
-                    <div className="card col s12 m6 l6">
+                    <div className="card col s12 m6 l6" style={cardPadding}>
                         <Graph graphData={this.state.depResults} type="bar" average={true} />
                     </div>
-                    <div className="col m1 l1" />
-                    <div className="card col s12 m5 l5">
+                    <div className="card col s12 m5 l5" style={cardPadding}>
                         <Graph graphData={this.state.depResults} type="doughnut" average={true} />
                     </div>
                 </div>

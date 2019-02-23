@@ -14,15 +14,19 @@ class Conversation extends Component {
         this.state = {
             userInfo: this.props.location.params,
             conversation: [],
+            conversationList: [],
             dataLoaded: false
         }
 
         this.getUserConversation = this.getUserConversation.bind(this);
+        this.getUserConversationList = this.getUserConversationList.bind(this);
     }
 
-    getUserConversation(userId) {
+    getUserConversation(userId, conversationId) {
 
-        let conversationUrl = process.env.REACT_APP_LILY_API_BASE_URL + 'api/userConversation/' + userId;
+        let conversationUrl = process.env.REACT_APP_LILY_API_BASE_URL + 'api/user/' +
+            userId + '/conversations/' + conversationId;
+
         Axios.get(conversationUrl).then((result) => {
             this.setState({
                 conversation: result.data,
@@ -31,11 +35,33 @@ class Conversation extends Component {
         })
     }
 
+    getUserConversationList(userId) {
+
+        let conversationUrl = process.env.REACT_APP_LILY_API_BASE_URL +
+            'api/user/' + userId + '/conversations';
+        
+            Axios.get(conversationUrl).then((result) => {
+            if (result.data.statusCode === 200) {
+                this.setState({
+                    conversationList: result.data.data.conversations,
+                    dataLoaded: true
+                })
+            }
+        })
+
+        if (this.state.dataLoaded === true) {
+            console.log("Data after fetching")
+            console.log(this.state.conversationList)
+        }
+
+    }
+
     componentDidMount() {
         M.AutoInit();
 
-        if ((typeof this.state.userInfo) !== 'undefined')
-            this.getUserConversation(this.state.userInfo.userId)
+        if ((typeof this.state.userInfo) !== 'undefined') {
+            this.getUserConversationList(this.state.userInfo.userId)
+        }
     }
 
     componentDidUpdate() {
@@ -43,20 +69,20 @@ class Conversation extends Component {
     }
 
     render() {
+
         const chatPanelStyle = {
             overflowY: 'scroll',
             height: '87vh'
         }
 
-        if ((typeof this.state.userInfo) === 'undefined') {
+        if(typeof this.state.userInfo === 'undefined')
             return <Redirect to="/" />
-        }
 
         if (!this.state.dataLoaded) {
             return (<LoadingComponent loaderStyle="spinner-layer spinner-blue-only" />);
-        } else {
+        }  {
             return (
-                <div>
+                <div className="App">
                     <div className="" style={chatPanelStyle}>
                         <div className="row">
                             <div className="col s12 m5 l5" >
@@ -68,8 +94,24 @@ class Conversation extends Component {
                                         </div>
                                         <div className="collapsible-body">
                                             <span>
-                                                <h6 className="grey-text darken-3 lighten-2">{this.state.userInfo.userId}</h6>
-                                                <ul className="grey-text darken-3 lighten-2 left-align">
+                                                <h6 className="grey-text text-darken-2"><b>{this.state.userInfo.firstname} {this.state.userInfo.lastname}</b></h6>
+                                                <ul className="grey-text text-darken-2 left-align">
+                                                    <li>Anxiety : {this.state.userInfo.anxiety}</li>
+                                                    <li>Stress : {this.state.userInfo.stress}</li>
+                                                    <li>Depression : {this.state.userInfo.depression}</li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="collapsible-header">
+                                            <i className="material-icons">chat_bubble</i>
+                                            <span>Conversations</span>
+                                        </div>
+                                        <div className="collapsible-body">
+                                            <span>
+                                                <h6 className="grey-text text-darken-2"><b>{this.state.userInfo.firstname} {this.state.userInfo.lastname}</b></h6>
+                                                <ul className="grey-text text-darken-2 left-align">
                                                     <li>Anxiety : {this.state.userInfo.anxiety}</li>
                                                     <li>Stress : {this.state.userInfo.stress}</li>
                                                     <li>Depression : {this.state.userInfo.depression}</li>
@@ -80,7 +122,7 @@ class Conversation extends Component {
                                     <li>
                                         <div className="collapsible-header">
                                             <i className="material-icons">pie_chart</i>
-                                            <span>Results</span>
+                                            <span>Results History</span>
                                         </div>
                                         <div className="collapsible-body">
                                             <span>
@@ -100,14 +142,6 @@ class Conversation extends Component {
                                         </div>
                                     </li>
                                 </ul>
-                                {/*<span className="card-panel show-on-medium-and-up">
-                                    <h6 className="grey-text darken-3 lighten-2">{this.state.userInfo.UserID}</h6>
-                                    <ul className="grey-text darken-3 lighten-2 left-align">
-                                        <li>Anxiety : {this.state.userInfo.Anxiety}</li>
-                                        <li>Stress : {this.state.userInfo.Stress}</li>
-                                        <li>Depression : {this.state.userInfo.Depression}</li>
-                                    </ul>
-                                </span>*/}
                             </div>
                             <div className="col s12 m7 l7">
                                 <span className="card-panel grey lighten-5 col s12 m11 l11">

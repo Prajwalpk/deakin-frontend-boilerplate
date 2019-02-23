@@ -34,7 +34,7 @@ class Scores extends Component {
                         this.state.depResults.map((result, i) => (
                             <div key={i}>
                                 <Link to={{ pathname: '/conversation', params: result }}>
-                                    <Card cardClass="col s12 m4 l3 card hoverable small" onClick={() => { this.handleCardClick(result.userId) }}>
+                                    <Card cardClass="col s12 m4 l3 card hoverable small" >
                                         <div className="card-image black-text">
                                             {/*<img src={BotIcon} className="circle"></img>*/}
                                         </div>

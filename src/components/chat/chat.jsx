@@ -29,6 +29,7 @@ class LilyDialogInterface extends Component {
 
         var messageObject = {
             userId: AppHelper.getUserId(),
+            conversationId: window.localStorage.getItem("conversationId"),
             message: previousStep.message
         }
 
@@ -59,18 +60,42 @@ LilyDialogInterface.propTypes = {
     step: PropTypes.object,
     steps: PropTypes.object,
     triggerNextStep: PropTypes.func,
+    conversationId: PropTypes.string,
 };
 
 LilyDialogInterface.defaultProps = {
     step: undefined,
     steps: undefined,
     triggerNextStep: undefined,
+    conversationId: undefined
 };
 
 /**
  * Chatbot interface
  */
 class Chat extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            conversationId: ''
+        }
+        this.socket = SocketIOClient(process.env.REACT_APP_LILY_API_BASE_URL);
+    }
+
+    componentDidMount() {
+        let newConnection = {
+            userId: AppHelper.getUserId()
+        }
+
+        this.socket.emit('newConnection', newConnection)
+        this.socket.on('newConnection', (message) => {
+            this.setState({
+                conversationId: message.conversationId
+            })
+            window.localStorage.setItem("conversationId", message.conversationId);
+        })
+    }
 
     render() {
         return (
