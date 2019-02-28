@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Graph from '../graph/graph';
 import LoadingComponent from '../loading/loading';
+import Axios from 'axios';
 
 class Dashboard extends Component {
     constructor(props) {
@@ -12,11 +13,23 @@ class Dashboard extends Component {
         }
     }
 
-    componentDidMount() {
-        this.setState({
-            depResults: this.props.content,
-            resultsLoaded: true
+    /**
+    * Get DASS results
+    */
+    getDepResults() {
+        let conversationUrl = process.env.REACT_APP_LILY_API_BASE_URL + 'api/user/userScores';
+        Axios.get(conversationUrl).then((result) => {
+
+            this.setState({
+                depResults: result.data.data,
+                resultsLoaded: true
+            })
         })
+    }
+
+    componentDidMount() {
+
+        this.getDepResults();
     }
 
     render() {
@@ -31,7 +44,7 @@ class Dashboard extends Component {
             marginRight: '2%'
         }
 
-        if ((typeof this.state.depResults) === 'undefined' || !this.state.depResults) {
+        if ((typeof this.state.depResults) === 'undefined' || !this.state.depResults || !this.state.resultsLoaded) {
             return (
                 <div className="Home">
                     <div className="container">

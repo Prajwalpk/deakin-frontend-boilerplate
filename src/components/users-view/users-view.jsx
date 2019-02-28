@@ -14,10 +14,6 @@ class Users extends Component {
             error: false,
             errorMessage: ''
         }
-
-        this.getUsers = this.getUsers.bind(this);
-        this.deleteUser = this.deleteUser.bind(this);
-        this.renderUsers = this.renderUsers.bind(this);
     }
 
     /**
@@ -111,7 +107,7 @@ class Users extends Component {
                                     <br /><br />
                                     {
                                         user.userRole === 'USER' ?
-                                            <Link to={{ pathname: '/conversation', params: user }}>
+                                            <Link to={{ pathname: '/conversation', params: user.userId }}>
                                                 <span className="grey-text text-darken-2">View Profile</span>
                                             </Link> : <div />
                                     }

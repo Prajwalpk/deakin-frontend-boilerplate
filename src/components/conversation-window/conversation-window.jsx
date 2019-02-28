@@ -6,7 +6,8 @@ class ConversationWindow extends Component {
     render() {
         let botBubble = {
             borderRadius: "10px",
-            backgroundColor: "rgba(18, 212, 251, 0.5)",
+            backgroundColor: "rgba(158, 158, 158, 1.0)",
+            color: "white",
             margin: "auto",
             paddingLeft: "2%",
             paddingRight: "2%",
@@ -18,7 +19,7 @@ class ConversationWindow extends Component {
 
         let userBubble = {
             borderRadius: "10px",
-            backgroundColor: "rgba(76, 239, 51, 0.5)",
+            backgroundColor: "rgba(129, 212, 250, 1.0)",
             margin: "auto",
             paddingLeft: "2%",
             paddingRight: "2%",
@@ -30,15 +31,16 @@ class ConversationWindow extends Component {
 
         return (
             <div>
-                <span className="left-align">
-                    <Card cardStyle={botBubble}>
-                        <h6>{this.props.content.BOT}</h6>
-                    </Card>
-                </span><br />
+                <br />
                 <span className="col s6 m6 l6" />
                 <span className="right-align">
                     <Card cardStyle={userBubble}>
                         <h6>{this.props.content.USER}</h6>
+                    </Card>
+                </span><br />
+                <span className="left-align">
+                    <Card cardStyle={botBubble}>
+                        <h6>{this.props.content.BOT}</h6>
                     </Card>
                 </span><br />
             </div>

@@ -1,7 +1,6 @@
 /**
  * @author: bephilip
  */
-
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import ChatBot from "react-simple-chatbot";
@@ -10,21 +9,23 @@ import SocketIOClient from 'socket.io-client';
 import AppHelper from "../../helpers/AppHelper.js";
 import botLogo from "../../images/lilybot.png";
 
+const Socket = SocketIOClient(process.env.REACT_APP_LILY_API_BASE_URL);
+
 /**
  * Backend interface for Lily
  */
-class LilyDialogInterface extends Component {
+class LilyDialogInterface extends React.PureComponent {
     constructor(props) {
         super(props);
 
         this.state = {
             lilyResponse: ''
         };
-
         this.socket = SocketIOClient(process.env.REACT_APP_LILY_API_BASE_URL);
     }
 
     componentDidMount() {
+
         const { previousStep } = this.props;
 
         var messageObject = {
@@ -37,63 +38,52 @@ class LilyDialogInterface extends Component {
         this.socket.on('lilybot', (result) => {
 
             this.setState({
-                lilyResponse: result
-            });
+                lilyResponse: result,
 
-            // Trigger the next step based on DialogFlow input
-            if (this.state.lilyResponse.includes("Question ")) {
-                this.props.triggerNextStep({ value: this.state.lilyResponse, trigger: "userOptions" });
-            } else {
-                this.props.triggerNextStep({ value: this.state.lilyResponse, trigger: "userAnswer" });
-            }
+            }, () => {
+                // Trigger the next step based on DialogFlow input
+                if (result.includes("Question ")) {
+                    this.props.triggerNextStep({ value: result, trigger: "userOptions" });
+                } else {
+                    this.props.triggerNextStep({ value: result, trigger: "userAnswer" });
+                }
+            });
         });
     }
 
     render() {
+
         return (
-            <span>{this.state.lilyResponse}</span>
-        );
+            <div>{this.state.lilyResponse}</div>
+        )
     }
 }
 
 LilyDialogInterface.propTypes = {
     step: PropTypes.object,
     steps: PropTypes.object,
-    triggerNextStep: PropTypes.func,
-    conversationId: PropTypes.string,
+    triggerNextStep: PropTypes.func
 };
 
 LilyDialogInterface.defaultProps = {
     step: undefined,
     steps: undefined,
-    triggerNextStep: undefined,
-    conversationId: undefined
+    triggerNextStep: undefined
 };
 
 /**
  * Chatbot interface
  */
 class Chat extends Component {
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            conversationId: ''
-        }
-        this.socket = SocketIOClient(process.env.REACT_APP_LILY_API_BASE_URL);
-    }
 
     componentDidMount() {
         let newConnection = {
             userId: AppHelper.getUserId()
         }
 
-        this.socket.emit('newConnection', newConnection)
-        this.socket.on('newConnection', (message) => {
-            this.setState({
-                conversationId: message.conversationId
-            })
-            window.localStorage.setItem("conversationId", message.conversationId);
+        Socket.emit('register', newConnection)
+        Socket.on('register', (message) => {
+            window.localStorage.setItem("conversationId", message);
         })
     }
 
@@ -115,7 +105,7 @@ class Chat extends Component {
                         id: "lilyQuestion",
                         component: <LilyDialogInterface />,
                         asMessage: true,
-                        trigger: "userAnswer",
+                        trigger: "userAnswer"
                     },
                     {
                         id: "userAnswer",

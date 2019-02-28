@@ -37,6 +37,8 @@ class AppHelper {
     window.localStorage.removeItem("userRole");
     window.localStorage.removeItem("userId");
     window.localStorage.removeItem("userName");
+    window.localStorage.removeItem("conversationId");
+    window.sessionStorage.removeItem("conversationId");
     history.push('/')
   }
 

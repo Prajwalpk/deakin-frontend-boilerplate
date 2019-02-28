@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import LoadingComponent from '../../components/loading/loading';
 import { history } from '../../helpers/router';
 import AdminSidenav from '../../components/admin-sidenav/admin-sidenav'
 import Dashboard from '../../components/dashboard/dashboard';
@@ -13,6 +12,7 @@ const views = {
   USERS: 'USERS',
   SCORES: 'SCORES'
 }
+
 class Home extends Component {
 
   constructor(props) {
@@ -26,9 +26,7 @@ class Home extends Component {
       currentView: views.DASHBOARD
     }
 
-    this.getDepResults = this.getDepResults.bind(this);
     this.handleSidenavClick = this.handleSidenavClick.bind(this);
-    this.renderPanels = this.renderPanels.bind(this);
   }
 
   /**
@@ -39,7 +37,7 @@ class Home extends Component {
     Axios.get(conversationUrl).then((result) => {
 
       this.setState({
-        depResults: result.data,
+        depResults: result.data.data,
         cardLoaded: true
       })
     })
@@ -60,8 +58,6 @@ class Home extends Component {
    */
   renderPanels() {
     switch (this.state.currentView) {
-      case this.state.views.DASHBOARD:
-        return <Dashboard content={this.state.depResults} />
       case this.state.views.USERS:
         return <Users />
       case this.state.views.SCORES:
@@ -76,37 +72,22 @@ class Home extends Component {
 
     if (admin !== null && admin === 'false') {
       history.push("/userhome");
-    } else {
-      this.getDepResults();
     }
   }
 
   render() {
-
-    if (!(typeof this.state.cardLoaded) === 'undefined' || !this.state.cardLoaded) {
-      return (
-        <div className="Home">
-          <header className="App-header">
-            <div className="container">
-              <LoadingComponent loaderStyle="spinner-layer spinner-blue-only" />
-            </div>
-          </header>
-        </div>
-      )
-    } else {
-      return (
-        <div className="Home grey lighten-4">
-          <header className="App-header">
-            <AdminSidenav currentView={this.state.currentView} onClick={this.handleSidenavClick} views={this.state.views} />
-            <div className="row Sidebar-fix">
-              {
-                this.renderPanels()
-              }
-            </div>
-          </header>
-        </div>
-      );
-    }
+    return (
+      <div className="Home grey lighten-4">
+        <header className="App-header">
+          <AdminSidenav currentView={this.state.currentView} onClick={this.handleSidenavClick} views={this.state.views} />
+          <div className="row Sidebar-fix">
+            {
+              this.renderPanels()
+            }
+          </div>
+        </header>
+      </div>
+    );
   }
 }
 
